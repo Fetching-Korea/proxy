@@ -29,18 +29,16 @@ export const lambdaHandler = async (
       })
     }
     const data = await axios(config)
-    if (data.headers['set-cookie'])
-      data.headers['set-cookie'] = data.headers['set-cookie']
     if (data.headers['transfer-encoding'])
       delete data.headers['transfer-encoding']
+    if (data.headers['content-type'])
+      data.headers['Content-Type'] = data.headers['content-type']
     console.log(JSON.stringify(data.headers))
     return {
       statusCode: 200,
-      body: data.data,
-      headers: data.headers
+      body: JSON.stringify({data: data.data, headers: data.headers})
     }
   } catch (e) {
-    console.log(JSON.stringify(e))
     return {
       statusCode: e.response?.status || 500,
       body: e
