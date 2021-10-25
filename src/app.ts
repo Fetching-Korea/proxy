@@ -16,6 +16,7 @@ export const lambdaHandler = async (
   }
   try {
     const headers = {...event.headers}
+    headers['X-Forwarded-For'] = null
     headers['X-Forwarded-Port'] = null
     headers['X-Forwarded-Proto'] = null
     headers['Host'] = null
@@ -33,7 +34,6 @@ export const lambdaHandler = async (
       delete data.headers['transfer-encoding']
     if (data.headers['content-type'])
       data.headers['Content-Type'] = data.headers['content-type']
-    console.log(JSON.stringify(data.headers))
     return {
       statusCode: 200,
       body: JSON.stringify({data: data.data, headers: data.headers})
@@ -41,7 +41,7 @@ export const lambdaHandler = async (
   } catch (e) {
     return {
       statusCode: e.response?.status || 500,
-      body: e
+      body: JSON.stringify({data: e.response?.data || e.message}))
     }
   }
 }
