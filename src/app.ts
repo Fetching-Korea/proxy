@@ -34,14 +34,20 @@ export const lambdaHandler = async (
       delete data.headers['transfer-encoding']
     if (data.headers['content-type'])
       data.headers['Content-Type'] = data.headers['content-type']
+
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": event.headers['Origin'] || "*"
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify({data: data.data, headers: data.headers})
+      body: JSON.stringify({data: data.data, headers: data.headers}),
+      headers: corsHeaders
     }
   } catch (e) {
     return {
       statusCode: e.response?.status || 500,
-      body: JSON.stringify({data: e.response?.data || e.message}))
+      body: JSON.stringify({data: e.response?.data || e.message})
     }
   }
 }
