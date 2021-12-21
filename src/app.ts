@@ -19,7 +19,9 @@ export const lambdaHandler = async (
     headers['X-Forwarded-For'] = null
     headers['X-Forwarded-Port'] = null
     headers['X-Forwarded-Proto'] = null
-    headers['Host'] = null
+    headers['Host'] = new URL(queries.url).host
+
+    console.log(JSON.stringify(headers))
     const config: AxiosRequestConfig = {
       method: event.httpMethod as Method,
       url: queries.url,
